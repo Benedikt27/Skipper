@@ -176,7 +176,7 @@ public class Controller {
     private void loginChanges() {
         status = 2;
         System.out.println("Logged in");
-        mid_label.setText("Skipper v0.1");
+        mid_label.setText("Skipper v0.4");
         sendButton.setText("Check User");
         sendButton_2.setText("Check User");
         password.setText("");

@@ -2,7 +2,7 @@
 
 ### Version 0.3
 
-Direct download link: https://test.com/
+Direct download link: https://github.com/Benedikt27/Skipper/releases/download/0.4/Skipper.jar
 
 Skipper Installation: Step-by-Step Tutorial
 
@@ -13,6 +13,7 @@ The Skipper is a brand new tool made by Bene27 in which helpers and above have t
 Installation
 
 For Windows:
+
 Run the skipper.jar file.
 If the file is not running, run the checkversion.bat file to view your Java version.
 
