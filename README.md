@@ -1,6 +1,6 @@
 # Skipper
 
-### Version 0.3
+### Version 0.1
 
 Direct download link: https://github.com/Benedikt27/Skipper/releases/download/0.4/Skipper.jar
 
