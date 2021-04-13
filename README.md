@@ -2,7 +2,7 @@
 
 ### Version 0.1
 
-Direct download link: https://github.com/Benedikt27/Skipper/releases/download/0.4/Skipper.jar
+Direct download link: https://github.com/Benedikt27/Skipper/releases/download/0.1/Skipper.jar
 
 Skipper Installation: Step-by-Step Tutorial
 
