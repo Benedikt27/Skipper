@@ -194,6 +194,29 @@ public class Server {
         return 0;
     }
 
+    public static String getBackground(String username) {
+        try {
+            writer.write(RSA.encrypt(serverKey, "getBackground:" + username) + "\n");
+            writer.flush();
+            String sraw;
+            while ((sraw = reader.readLine()) != null) {
+                break;
+            }
+
+            String s = RSA.decrypt(keyPair.getPrivate(), sraw);
+
+            return s;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void setBackground(String username, String background) {
+        writer.write(RSA.encrypt(serverKey, "setBackground:" + username + ":" + background) + "\n");
+        writer.flush();
+    }
+
     public static void removeSkip(String username) {
         writer.write(RSA.encrypt(serverKey, "removeSkip:" + username) + "\n");
         writer.flush();

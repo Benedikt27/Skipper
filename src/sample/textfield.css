@@ -1,0 +1,10 @@
+.text-field {
+    -fx-font-weight: bold;
+    -fx-background-color: rgba(255, 255, 255, 0.7);
+    -fx-background-radius: 5;
+    -fx-font-size: 15;
+    -fx-text-fill: rgb(0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(163, 140, 170, 1), 10, 0.3, 1, 1);
+    -fx-prompt-text-fill: #8097ba;
+    -fx-font-family: "Bernard MT Condensed";
+}
