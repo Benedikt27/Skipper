@@ -2,6 +2,7 @@
 
 ### Version 0.3
 
+
 Current version: 0.3
 
 Direct download link: https://github.com/Benedikt27/Skipper/releases/download/0.3/Skipper.jar
