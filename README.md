@@ -1,6 +1,6 @@
 # Skipper
 
-### Version 0.3
+### Version 0.1
 
 
 Current version: 0.3
