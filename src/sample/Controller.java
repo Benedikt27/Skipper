@@ -10,6 +10,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class Controller {
 
     public Button sendButton;
@@ -30,13 +34,15 @@ public class Controller {
     public BorderPane top;
     public ToolBar bar;
     public Button minimizebtn;
+    public Button anchorbtn;
+    public Label skipcount;
 
     private double xOffset = 0;
     private double yOffset = 0;
 
     private int status = 0;
-    // 0 = logged out / 1 = enter un / 2 = logged in / 3 = BGChange
-
+    // 0 = logged out / 1 = enter username / 2 = logged in / 3 = BGChange
+    private boolean anchored = false;
 
     public Controller getInstance() {
         return this;
@@ -48,7 +54,7 @@ public class Controller {
             if (!name_field.getCharacters().toString().equalsIgnoreCase("")) {
 
                 if (sendButton_2.getText().equalsIgnoreCase("Check")) {
-                    mid_label.setText("Skipper v0.3");
+                    mid_label.setText("Skipper v0.5");
                     sendButton_2.setText("Skip");
                     if (Server.getSkips(name_field.getText()) != 0) {
                         remove_skip.setVisible(true);
@@ -70,6 +76,7 @@ public class Controller {
                             perfection = " Skip";
                         }
                         Server.addSkip(name_field.getText(), executingStaff);
+                        skipcount.setText(String.valueOf(Integer.parseInt(skipcount.getText().trim()) + 1));
                         remove_skip.setVisible(true);
                         hasSkips.setText("has " + Server.getSkips(name_field.getText()) + perfection + " (" + (Server.getMaxSkips() - Server.getSkips(name_field.getText())) + " left)");
                     } else {
@@ -168,30 +175,34 @@ public class Controller {
             cancel.setText("Cancel");
             sendButton_2.setDefaultButton(false);
             sendButton.setDefaultButton(true);
-            bgbutton.setVisible(true);
+            bgbutton.setVisible(false);
             url.setVisible(false);
             bgbutton.setText("BG");
         } else if (status == 2) {
-            status = 0;
-            label2.setVisible(true);
-            label2.setText("Please enter your Username");
-            password.setVisible(false);
-            cancel.setVisible(false);
-            name_field.setVisible(false);
-            username.setVisible(true);
-            sendButton.setText("Login");
-            username.setText("");
-            name_field.setText("");
-            hasSkips.setText("");
-            skipField.setText("");
-            sendButton.setVisible(true);
-            sendButton_2.setVisible(false);
-            cancel.setText("Cancel");
-            sendButton_2.setDefaultButton(false);
-            sendButton.setDefaultButton(true);
-            Server.logout();
-            System.out.println("Logged out");
-            bgbutton.setVisible(true);
+            if (cancel.getText().equals("Sure?")) {
+                status = 0;
+                label2.setVisible(true);
+                label2.setText("Please enter your Username");
+                password.setVisible(false);
+                cancel.setVisible(false);
+                name_field.setVisible(false);
+                username.setVisible(true);
+                sendButton.setText("Login");
+                username.setText("");
+                name_field.setText("");
+                hasSkips.setText("");
+                skipField.setText("");
+                sendButton.setVisible(true);
+                sendButton_2.setVisible(false);
+                cancel.setText("Cancel");
+                sendButton_2.setDefaultButton(false);
+                sendButton.setDefaultButton(true);
+                Server.logout();
+                System.out.println("Logged out");
+                bgbutton.setVisible(false);
+            } else {
+                cancel.setText("Sure?");
+            }
         } else if (status == 3) {
             status = 2;
             url.setVisible(false);
@@ -206,7 +217,7 @@ public class Controller {
     private void loginChanges() {
         status = 2;
         System.out.println("Logged in");
-        mid_label.setText("Skipper v0.3");
+        mid_label.setText("Skipper v0.5");
         sendButton.setText("Check");
         sendButton_2.setText("Check");
         password.setText("");
@@ -217,9 +228,10 @@ public class Controller {
         name_field.setVisible(true);
         label2.setVisible(false);
         bgbutton.setVisible(true);
+        skipcount.setText(String.valueOf(Server.getUserSkips(username.getText())));
         if (Server.getBackground(username.getText()) != null) {
             BackgroundImage myBI = new BackgroundImage(new Image(Server.getBackground(username.getText()), 500, 400, false, true),
-                    BackgroundRepeat.SPACE, BackgroundRepeat.ROUND, BackgroundPosition.CENTER,
+                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                     BackgroundSize.DEFAULT);
             pane.setBackground(new Background(myBI));
             PixelReader reader = myBI.getImage().getPixelReader();
@@ -230,7 +242,8 @@ public class Controller {
 
     public void rem_skip(ActionEvent actionEvent) {
 
-        Server.removeSkip(name_field.getText());
+        Server.removeSkip(name_field.getText(), username.getText());
+        skipcount.setText(String.valueOf(Integer.parseInt(skipcount.getText().trim()) - 1));
         String perfection;
         if (Server.getSkips(name_field.getText()) != 1) {
             perfection = " Skips";
@@ -257,23 +270,40 @@ public class Controller {
             cancel.setText("Cancel");
             name_field.setVisible(false);
             sendButton_2.setVisible(false);
+            label2.setText("");
             status = 3;
         } else if (bgbutton.getText().equals("Save")) {
             try {
                 BackgroundImage myBI = new BackgroundImage(new Image(url.getText(), 500, 400, false, true),
-                        BackgroundRepeat.SPACE, BackgroundRepeat.ROUND, BackgroundPosition.CENTER,
+                        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                         BackgroundSize.DEFAULT);
                 PixelReader reader = myBI.getImage().getPixelReader();
                 CornerRadii radii = new CornerRadii(0);
                 bar.setBackground(new Background(new BackgroundFill(reader.getColor(249, 199), radii, null)));
                 pane.setBackground(new Background(myBI));
                 Server.setBackground(username.getText(), url.getText());
+
+                ClassLoader classLoader = getClass().getClassLoader();
+                for (String line : Files.readAllLines(Paths.get(classLoader.getResource("sample/style.css").getPath()))) {
+                    System.out.println(line);
+                }
+
+//                File styleFile = new File(classLoader.getResource("../sample/style.css").getFile());
+//                if (styleFile.exists()) {
+//                    System.out.println("geht");
+//                } else {
+//                    System.out.println("geht nicht!");
+//                }
+
+
             } catch (IllegalArgumentException e) {
                 mid_label.setVisible(true);
                 mid_label.setText("Invalid Link");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             label2.setVisible(true);
-            label2.setText("Skipper v0.3");
+            label2.setText("Skipper v0.5");
             status = 2;
             sendButton_2.setVisible(true);
             password.setText("");
@@ -283,6 +313,8 @@ public class Controller {
             bgbutton.setText("BG");
             mid_label.setVisible(true);
             url.setText("");
+            name_field.setVisible(true);
+            label2.setText("");
         }
     }
 
@@ -309,7 +341,18 @@ public class Controller {
     }
 
     public void minimize(ActionEvent actionEvent) {
-        Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         stage.setIconified(true);
+    }
+
+    public void anchor(ActionEvent actionEvent) {
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        if (anchored) {
+            stage.setAlwaysOnTop(false);
+            anchored = !anchored;
+        } else {
+            stage.setAlwaysOnTop(true);
+            anchored = !anchored;
+        }
     }
 }

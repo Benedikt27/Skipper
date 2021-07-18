@@ -106,6 +106,24 @@ public class Server {
         return false;
     }
 
+    public static String getUserSkips(String username) {
+        try {
+            writer.write(RSA.encrypt(serverKey, "getUserSkips:" + username) + "\n");
+            writer.flush();
+            String sraw;
+            while ((sraw = reader.readLine()) != null) {
+                break;
+            }
+
+            String s = RSA.decrypt(keyPair.getPrivate(), sraw);
+            System.out.println(s);
+            return s;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Error";
+    }
+
     public static boolean hasLoggedIn(String username) {
         try {
             writer.write(RSA.encrypt(serverKey, "hasLoggedIn:" + username) + "\n");
@@ -164,7 +182,7 @@ public class Server {
 
     public static void sendPublicKey() {
         try {
-            writer.write("clientPublic:" + RSA.getKeyAsString(keyPair.getPublic()) + "\n");
+            writer.write("clientPublic:" + RSA.getKeyAsString(keyPair.getPublic()) + ":0.5" + "\n");
             writer.flush();
             String s;
             while ((s = reader.readLine()) != null) {
@@ -217,8 +235,8 @@ public class Server {
         writer.flush();
     }
 
-    public static void removeSkip(String username) {
-        writer.write(RSA.encrypt(serverKey, "removeSkip:" + username) + "\n");
+    public static void removeSkip(String username, String executingStaff) {
+        writer.write(RSA.encrypt(serverKey, "removeSkip:" + username + ":" + executingStaff) + "\n");
         writer.flush();
     }
 

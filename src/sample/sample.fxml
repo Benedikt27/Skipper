@@ -51,7 +51,7 @@
                </GridPane.margin>
             </Button>
             <TextField fx:id="name_field" onKeyPressed="#redo" stylesheets="@textfield.css" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="15" />
-            <Label fx:id="mid_label" alignment="CENTER" prefHeight="27.0" prefWidth="223.0" stylesheets="@Label.css" text="Skipper v0.3" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="6">
+            <Label fx:id="mid_label" alignment="CENTER" prefHeight="27.0" prefWidth="223.0" stylesheets="@Label.css" text="Skipper v0.5" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="6">
                <font>
                   <Font size="18.0" />
                </font>
@@ -82,6 +82,15 @@
                </GridPane.margin>
             </Button>
             <TextField fx:id="url" promptText="Enter URL" stylesheets="@textfield.css" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+            <Button fx:id="anchorbtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#anchor" stylesheets="@button.css" text="☩" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Button>
+            <Label fx:id="skipcount" alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="83.0" stylesheets="@Label.css" GridPane.columnIndex="2" GridPane.rowIndex="6" />
          </children>
       </GridPane>
    </center>
